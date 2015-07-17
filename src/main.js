@@ -24,9 +24,13 @@
     var setHSkin = new Skin( { fill:"#00CD00" } );
     var luminancelabelStyle = new Style( { font: "bold 30px", color:"black" } );
     var labelStyle = new Style( { font: "30px", color:"white" } );
+    var biglabelStyle = new Style( { font: "50px", color:"white" } );
+    var midlabelStyle = new Style( { font: "40px", color:"white" } );
+        
+    
     var templabelStyle = new Style( { font: "30px", color:"white" } );
     var bluelabelStyle = new Style( { font: "30px", color:"#4169E1" } );
-        var bigbluelabelStyle = new Style( { font: "40px", color:"#4169E1" } );
+    var bigbluelabelStyle = new Style( { font: "40px", color:"#4169E1" } );
     
     var sliderLabelStyle = new Style({ font:"bold", size:14, horizontal:"left", color:["white","white","#acd473"] });
 	var sliderValueStyle = new Style({ font:"bold", size:14, horizontal:"right", color:["white","white","#acd473"] });
@@ -55,7 +59,7 @@
         var waterButton = BUTTONS.Button.template(function($){ return{
         left: 0, right: 1, top: 0, bottom: 0,skin: blueSkin,
         contents: [
-            new Label({left:0, right:0, height:40, string:"Watering", style: labelStyle})
+            new Label({left:0, right:0, height:40, string:"Watering", style: midlabelStyle})
         ],
         behavior: Object.create(BUTTONS.ButtonBehavior.prototype, {
             onTap: { value: function(content){
@@ -69,7 +73,7 @@
         var lightButton = BUTTONS.Button.template(function($){ return{
         left: 1, right: 0, top: 0, bottom: 0,skin: blueSkin,
         contents: [
-            new Label({left:0, right:0, height:40, string:"LED", style: labelStyle})
+            new Label({left:0, right:0, height:40, string:"LED", style: midlabelStyle})
         ],
         behavior: Object.create(BUTTONS.ButtonBehavior.prototype, {
             onTap: { value: function(content){
@@ -90,7 +94,7 @@
     var ahButton = BUTTONS.Button.template(function($){ return{
         right:10, width:60 , height:60,skin: blueSkin,
         contents: [
-            new Label({left:0, right:0, height:40, string:"+", style: labelStyle})
+            new Label({left:0, right:0, height:40, string:"+", style: biglabelStyle})
         ],
         behavior: Object.create(BUTTONS.ButtonBehavior.prototype, {
             onTap: { value: function(content){
@@ -104,7 +108,7 @@
         var mhButton = BUTTONS.Button.template(function($){ return{
         left:10,width:60 , height:60,skin: blueSkin,
         contents: [
-            new Label({left:0, right:0, height:40, string:"-", style: labelStyle})
+            new Label({left:0, right:0, height:40, string:"-", style: biglabelStyle})
         ],
         behavior: Object.create(BUTTONS.ButtonBehavior.prototype, {
             onTap: { value: function(content){
@@ -118,7 +122,7 @@
         var alButton = BUTTONS.Button.template(function($){ return{
         right:10, width:60 , height:60,skin: blueSkin,
         contents: [
-            new Label({left:0, right:0, height:40, string:"+", style: labelStyle})
+            new Label({left:0, right:0, height:40, string:"+", style: biglabelStyle})
         ],
         behavior: Object.create(BUTTONS.ButtonBehavior.prototype, {
             onTap: { value: function(content){
@@ -132,7 +136,7 @@
         var mlButton = BUTTONS.Button.template(function($){ return{
         left:10,width:60 , height:60,skin: blueSkin,
         contents: [
-            new Label({left:0, right:0, height:40, string:"-", style: labelStyle})
+            new Label({left:0, right:0, height:40, string:"-", style: biglabelStyle})
         ],
         behavior: Object.create(BUTTONS.ButtonBehavior.prototype, {
             onTap: { value: function(content){
