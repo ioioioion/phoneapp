@@ -23,7 +23,7 @@
     var whiteSkin = new Skin( { fill:"white" } );
     var setHSkin = new Skin( { fill:"#00CD00" } );
     var luminancelabelStyle = new Style( { font: "bold 30px", color:"black" } );
-    var labelStyle = new Style( { font: "bold 30px", color:"white" } );
+    var labelStyle = new Style( { font: "30px", color:"white" } );
     var templabelStyle = new Style( { font: "30px", color:"white" } );
     var bluelabelStyle = new Style( { font: "30px", color:"#4169E1" } );
         var bigbluelabelStyle = new Style( { font: "40px", color:"#4169E1" } );
@@ -55,7 +55,7 @@
         var waterButton = BUTTONS.Button.template(function($){ return{
         left: 10, right: 10, top: 0, bottom: 10,skin: blueSkin,
         contents: [
-            new Label({left:0, right:0, height:40, string:"water", style: labelStyle})
+            new Label({left:0, right:0, height:40, string:"Watering", style: labelStyle})
         ],
         behavior: Object.create(BUTTONS.ButtonBehavior.prototype, {
             onTap: { value: function(content){
@@ -69,7 +69,7 @@
         var lightButton = BUTTONS.Button.template(function($){ return{
         left: 10, right: 10, top: 0, bottom: 10,skin: blueSkin,
         contents: [
-            new Label({left:0, right:0, height:40, string:"light", style: labelStyle})
+            new Label({left:0, right:0, height:40, string:"LED", style: labelStyle})
         ],
         behavior: Object.create(BUTTONS.ButtonBehavior.prototype, {
             onTap: { value: function(content){
