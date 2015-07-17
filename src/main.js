@@ -16,7 +16,7 @@
 	tiles:{ left:10, right:10 }
 	});
 	var sliderThumbSkin = new Skin({ texture: marksTexture, x:70, y:0, width:20, height:30, states:30 });
-    var graySkin = new Skin( { fill:"#999999" } );    
+    var graySkin = new Skin( { fill:"#BBBBBB" } );    
     var blueSkin = new Skin( { fill:"#4169E1" } );
     var humiditySkin = new Skin( { fill:"#6A5ACD" } );
     var luminanceSkin = new Skin( { fill:"#FF4040" } );
@@ -53,7 +53,7 @@
     var adj_hum_Label = new Label({left:0, right:0, height:60, string:"50 %", style: bigbluelabelStyle});
     var adj_lum_Label = new Label({left:0, right:0, height:60, string:"200 lx", style: bigbluelabelStyle});
         var waterButton = BUTTONS.Button.template(function($){ return{
-        left: 0, right: 1, top: 0, bottom: 0,skin: blueSkin,
+        left: 2, right: 1, top: 0, bottom: 2,skin: blueSkin,
         contents: [
             new Label({left:0, right:0, height:40, string:"Watering", style: labelStyle})
         ],
@@ -67,7 +67,7 @@
         })
     }});
         var lightButton = BUTTONS.Button.template(function($){ return{
-        left: 1, right: 0, top: 0, bottom: 0,skin: blueSkin,
+        left: 1, right: 2, top: 0, bottom: 2,skin: blueSkin,
         contents: [
             new Label({left:0, right:0, height:40, string:"LED", style: labelStyle})
         ],
