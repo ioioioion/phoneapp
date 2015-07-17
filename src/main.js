@@ -53,7 +53,7 @@
     var adj_hum_Label = new Label({left:0, right:0, height:60, string:"50 %", style: bigbluelabelStyle});
     var adj_lum_Label = new Label({left:0, right:0, height:60, string:"200 lx", style: bigbluelabelStyle});
         var waterButton = BUTTONS.Button.template(function($){ return{
-        left: 10, right: 10, top: 0, bottom: 10,skin: blueSkin,
+        left: 0, right: 1, top: 0, bottom: 0,skin: blueSkin,
         contents: [
             new Label({left:0, right:0, height:40, string:"Watering", style: labelStyle})
         ],
@@ -67,7 +67,7 @@
         })
     }});
         var lightButton = BUTTONS.Button.template(function($){ return{
-        left: 10, right: 10, top: 0, bottom: 10,skin: blueSkin,
+        left: 1, right: 0, top: 0, bottom: 0,skin: blueSkin,
         contents: [
             new Label({left:0, right:0, height:40, string:"LED", style: labelStyle})
         ],
