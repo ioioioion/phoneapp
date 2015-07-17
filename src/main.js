@@ -16,9 +16,16 @@
 	tiles:{ left:10, right:10 }
 	});
 	var sliderThumbSkin = new Skin({ texture: marksTexture, x:70, y:0, width:20, height:30, states:30 });
-    
+    var graySkin = new Skin( { fill:"#555555" } );    
+    var blueSkin = new Skin( { fill:"#4169E1" } );
+    var humiditySkin = new Skin( { fill:"#6A5ACD" } );
+    var luminanceSkin = new Skin( { fill:"#FF4040" } );
     var whiteSkin = new Skin( { fill:"white" } );
-    var labelStyle = new Style( { font: "bold 30px", color:"black" } );
+    var setHSkin = new Skin( { fill:"#00CD00" } );
+    var luminancelabelStyle = new Style( { font: "bold 30px", color:"black" } );
+    var labelStyle = new Style( { font: "bold 30px", color:"white" } );
+    var templabelStyle = new Style( { font: "bold 30px", color:"white" } );
+    var bluelabelStyle = new Style( { font: "bold 30px", color:"#4169E1" } );
     var sliderLabelStyle = new Style({ font:"bold", size:14, horizontal:"left", color:["white","white","#acd473"] });
 	var sliderValueStyle = new Style({ font:"bold", size:14, horizontal:"right", color:["white","white","#acd473"] });
     var temp = 25;
@@ -37,14 +44,14 @@
             deviceURL = "";
         }
     }));
-    var luminanceLabel = new Label({left:0, right:0, height:40, string:"Luminance: "+luminance+" lx", style: labelStyle});
-    var humidityLabel = new Label({left:0, right:0, height:40, string:"Humidity: "+humidity+" %", style: labelStyle});
-    var tempLabel = new Label({left:0, right:0, height:40, string:"Temperature: "+temp+" °C", style: labelStyle});
+    var luminanceLabel = new Label({left:0, right:0,bottom:1, height:40, string:"Luminance: "+luminance+" lx", style: templabelStyle,skin:blueSkin});
+    var humidityLabel = new Label({left:0, right:0,bottom:1, height:40, string:"Humidity: "+humidity+" %", style: templabelStyle,skin:blueSkin});
+    var tempLabel = new Label({left:0, right:0,bottom:1, height:40,string:"Temperature: "+temp+" °C", style: templabelStyle,skin:blueSkin});
     
-    var adj_hum_Label = new Label({left:0, right:0, height:60, string:"50 %", style: labelStyle});
-    var adj_lum_Label = new Label({left:0, right:0, height:60, string:"200 lx", style: labelStyle});
+    var adj_hum_Label = new Label({left:0, right:0, height:60, string:"50 %", style: bluelabelStyle});
+    var adj_lum_Label = new Label({left:0, right:0, height:60, string:"200 lx", style: bluelabelStyle});
         var waterButton = BUTTONS.Button.template(function($){ return{
-        left: 0, right: 10, top: 0, bottom: 0,
+        left: 10, right: 10, top: 0, bottom: 10,skin: blueSkin,
         contents: [
             new Label({left:0, right:0, height:40, string:"water", style: labelStyle})
         ],
@@ -58,7 +65,7 @@
         })
     }});
         var lightButton = BUTTONS.Button.template(function($){ return{
-        left: 10, right: 0, top: 0, bottom: 0,
+        left: 10, right: 10, top: 0, bottom: 10,skin: blueSkin,
         contents: [
             new Label({left:0, right:0, height:40, string:"light", style: labelStyle})
         ],
@@ -72,14 +79,14 @@
         })
     }});
         var actionLine = new Line({
-        left: 10, right: 10, top: 0, bottom: 10, active: true, skin: whiteSkin,
+        left: 0, right: 0, top: 0, bottom: 0, active: true, skin: whiteSkin,
         contents: [
             new waterButton(),
             new lightButton()  
         ]
     });
     var ahButton = BUTTONS.Button.template(function($){ return{
-        width:60 , height:60,
+        right:10, width:60 , height:60,skin: blueSkin,
         contents: [
             new Label({left:0, right:0, height:40, string:"+", style: labelStyle})
         ],
@@ -93,7 +100,7 @@
         })
     }});
         var mhButton = BUTTONS.Button.template(function($){ return{
-        width:60 , height:60,
+        left:10,width:60 , height:60,skin: blueSkin,
         contents: [
             new Label({left:0, right:0, height:40, string:"-", style: labelStyle})
         ],
@@ -107,7 +114,7 @@
         })
     }});
         var alButton = BUTTONS.Button.template(function($){ return{
-        width:60 , height:60,
+        right:10, width:60 , height:60,skin: blueSkin,
         contents: [
             new Label({left:0, right:0, height:40, string:"+", style: labelStyle})
         ],
@@ -121,7 +128,7 @@
         })
     }});
         var mlButton = BUTTONS.Button.template(function($){ return{
-        width:60 , height:60,
+        left:10,width:60 , height:60,skin: blueSkin,
         contents: [
             new Label({left:0, right:0, height:40, string:"-", style: labelStyle})
         ],
@@ -135,7 +142,7 @@
         })
     }});
     var adj_humidiLine = new Line({
-        left: 10, right: 10, height:70, active: true, skin: whiteSkin,
+        left: 0, right: 0, height:70, bottom: 1,active: true, skin: whiteSkin,
         contents: [
             new mhButton(),
             adj_hum_Label,
@@ -143,7 +150,7 @@
         ]
     });
     var adj_lumLine = new Line({
-        left: 10, right: 10, height:70, active: true, skin: whiteSkin,
+        left: 0, right: 0, height:70, bottom: 1,active: true, skin: whiteSkin,
         contents: [
             new mlButton(),
             adj_lum_Label,
@@ -151,16 +158,16 @@
         ]
     });
     var mainColumn = new Column({
-        left: 0, right: 0, top: 0, bottom: 0, active: true, skin: whiteSkin,
+        left: 0, right: 0, top: 0, bottom: 0, active: true, skin: graySkin,
         contents: [
             tempLabel,
             humidityLabel,
             luminanceLabel,
-            new Label({left:0, right:0, height:40, string:"Set Humidity", style: labelStyle}),
+            new Label({left:0, right:0, height:40, string:"Set Humidity", style: bluelabelStyle, skin: whiteSkin}),
             adj_humidiLine,
-            new Label({left:0, right:0, height:40, string:"Set Luminance", style: labelStyle}),
+            new Label({left:0, right:0, height:40, string:"Set Luminance", style: bluelabelStyle, skin: whiteSkin}),
             adj_lumLine,
-            new Label({left:0, right:0, height:40, string:"Actions", style: labelStyle}),
+            new Label({left:0, right:0, height:40, string:"Actions", style: bluelabelStyle, skin: whiteSkin}),
             actionLine
         ],
         behavior: Behavior({
