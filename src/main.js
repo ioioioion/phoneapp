@@ -24,8 +24,8 @@
     var setHSkin = new Skin( { fill:"#00CD00" } );
     var luminancelabelStyle = new Style( { font: "bold 30px", color:"black" } );
     var labelStyle = new Style( { font: "30px", color:"white" } );
-    var biglabelStyle = new Style( { font: "50px", color:"white" } );
-    var midlabelStyle = new Style( { font: "40px", color:"white" } );
+    var biglabelStyle = new Style( { font: "40px", color:"white" } );
+    var midlabelStyle = new Style( { font: "32px", color:"white" } );
         
     
     var templabelStyle = new Style( { font: "30px", color:"white" } );
