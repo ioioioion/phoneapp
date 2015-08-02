@@ -8,10 +8,8 @@
     <variable id="temp_min" value="0"/>
     <variable id="temp_max" value="0"/>
    	<variable id="lumi_exp" value="0"/>
-    <variable id="led_sts" value="0"/>
-    <variable id="led_manual" value="0"/>
-    <variable id="water_sts" value="0"/>
-    <variable id="water_manual" value="0"/>
+    <variable id="led_auto" value="0"/>
+    <variable id="water_auto" value="0"/>
     <variable id="temp_Info" value="0"/>
     <variable id="lumi_Info" value="0"/>
     <variable id="humi_Info" value="0"/>
@@ -42,6 +40,45 @@
     <style id="biglabelStyle" font="bold 24px" color="white" align="center,middle"/>
     <style id="numStyle" font="26px" color="white" align="center,middle"/>
 
+    <handler path="/pull">
+    	<behavior>
+    		<method id="onInvoke" params="handler, message"><![CDATA[
+                //Receives result and passes to main container.
+                var saeurl = "http://xijincheng.sinaapp.com/kinoma";
+				var message_sae = new Message(saeurl);
+				message_sae.method = "GET";
+				handler.invoke(message_sae, Message.JSON);           
+			]]></method>
+            <method id="onComplete" params="handler, message, json"><![CDATA[
+                //Receives result and passes to main container.
+                if(json!=undefined){
+                temp_min=json.temp_min;
+                temp_max=json.temp_max;
+                lumi_exp=json.lumi_exp;
+                humi_exp=json.humi_exp;
+                led_auto=json.lumi_auto;
+                water_auto=json.humi_auto;
+                humi_Info=json.humi;
+                temp_Info=json.temp;
+                lumi_Info=json.lumi;
+ /*               
+                application.distribute( "maxtempChanged", temp_max );
+                application.distribute( "mintempChanged", temp_min );
+                application.distribute( "humiChanged", humi_exp );
+                application.distribute( "lumiChanged", lumi_exp );
+*/              
+				trace(json.temp_min); 
+				trace(json.temp_max); 
+				trace(json.lumi_exp); 
+				trace(json.humi_exp); 
+                trace(json.humi_auto); 
+                trace(json.lumi_auto); 
+                                                		 
+
+              }
+            ]]></method>
+        </behavior>
+    </handler>
     <behavior id="ButtonBehavior_maxtemp_setting">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
@@ -298,12 +335,17 @@
             label.skin = button_setting_Skin;
             label.style = biglabelStyle;
             label.active = true;
+            label.interval = 2000;
+            label.start(); 
         </method>
         <method id="onTouchBegan" params="label">
             label.skin = hiliteSkin;
         </method>
         <method id="onTouchEnded" params="label">
         </method>
+        <method id="onTimeChanged" params="label"><![CDATA[
+                label.invoke(new Message("/pull"));
+         ]]></method>
     </behavior>
 	<container id="MainScreen" top="0" left="0" bottom="0" right="0" skin="backgroundSkin">
 	    <column top="0" left="0" bottom="0" right="0">
