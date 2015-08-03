@@ -509,10 +509,10 @@
                 <![CDATA[
                 for (var key in query) {
                     switch(key){
-                        case "temp_max":var po_temp_max = query[key];break;
-                        case "temp_min":var po_temp_min = query[key];break;
-                        case "lumi_exp":var po_lumi_exp = query[key];break;
-                        case "humi_exp":var po_humi_exp = query[key];break;
+                        case "temp_max":var po_temp_max = eval(query[key]).toFixed(0);break;
+                        case "temp_min":var po_temp_min = eval(query[key]).toFixed(0);break;
+                        case "lumi_exp":var po_lumi_exp = eval(query[key]).toFixed(0);break;
+                        case "humi_exp":var po_humi_exp = eval(query[key]).toFixed(0);break;
                     }  
                 }
                 var saeurl = "http://xijincheng.sinaapp.com/phone";
