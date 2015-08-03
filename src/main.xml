@@ -427,7 +427,7 @@
                 </label>
                 <label string="'70 lx'">
                     <behavior like="ButtonBehavior_explig_num_setting">
-                        <method id="onTap" params="label">label.invoke(new Message("/light_setting"));</method>
+                        <method id="onTap" params="label">label.invoke(new Message("/setting"));</method>
                         <method id="lumiChanged" params="label"><![CDATA[
                    			 label.string= lumi_exp + " lx";
     					 ]]></method>
@@ -460,11 +460,11 @@
                     items: [
                         {
                             Item: DIALOG.Slider,
-                            id: "lumi_exp",
-                            label: "Set Luminance",
+                            id: "humi_exp",
+                            label: "Set Humidity",
                             min: 0,
-                            max: 10000,
-                            value: lumi_exp,
+                            max: 100,
+                            value: humi_exp,
                             toString: function(val) { return Math.floor(val); }, 
                         },
                         {
@@ -478,30 +478,57 @@
                         },
                         {
                             Item: DIALOG.Slider,
-                            id: "lumi_exp",
-                            label: "Set Luminance",
+                            id: "temp_max",
+                            label: "Set Temperature Max",
                             min: 0,
-                            max: 10000,
-                            value: lumi_exp,
+                            max: 50,
+                            value: temp_max,
                             toString: function(val) { return Math.floor(val); }, 
                         },
                         {
                             Item: DIALOG.Slider,
-                            id: "lumi_exp",
-                            label: "Set Luminance",
+                            id: "temp_min",
+                            label: "Set Temperature Min",
                             min: 0,
-                            max: 10000,
-                            value: lumi_exp,
+                            max: 50,
+                            value: temp_min,
                             toString: function(val) { return Math.floor(val); }, 
                         }
                     ],
                     ok: "Comfirm",
                     cancel: "Close",
-                    action: "/light_set",
+                    action: "/setting_handler",
                 };
             </method>
         </behavior>
     </handler> 
+    
+    <handler path="/setting_handler">
+        <behavior like="MODEL.CommandBehavior">
+            <method id="onQuery" params="handler, query">
+                <![CDATA[
+                for (var key in query) {
+                    switch(key){
+                        case "temp_max":var po_temp_max = query[key];break;
+                        case "temp_min":var po_temp_min = query[key];break;
+                        case "lumi_exp":var po_lumi_exp = query[key];break;
+                        case "humi_exp":var po_humi_exp = query[key];break;
+                    }  
+                }
+                var saeurl = "http://xijincheng.sinaapp.com/phone";
+				var message_sae = new Message(saeurl);
+				message_sae.method = "POST";
+				message_sae.requestText = encodeURI("humi_exp="+po_humi_exp+"&lumi_exp="+po_lumi_exp+"&temp_max="+po_temp_max+"&temp_min="+po_temp_min);
+				message_sae.setRequestHeader("Content-Length", message_sae.requestText.length);
+				message_sae.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				handler.invoke(message_sae, Message.TEXT);           
+            ]]>
+            </method>
+            <method id="onComplete" params="handler, message, text"><![CDATA[
+                trace(text);
+            ]]></method>
+        </behavior>
+    </handler>
 </program>
 
 
