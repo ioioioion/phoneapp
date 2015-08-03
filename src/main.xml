@@ -52,31 +52,47 @@
             <method id="onComplete" params="handler, message, json"><![CDATA[
                 //Receives result and passes to main container.
                 if(json!=undefined){
-                temp_min=json.temp_min;
-                temp_max=json.temp_max;
-                lumi_exp=json.lumi_exp;
-                humi_exp=json.humi_exp;
-                led_auto=json.lumi_auto;
-                water_auto=json.humi_auto;
-                humi_Info=json.humi;
-                temp_Info=json.temp;
-                lumi_Info=json.lumi;
-
-                application.distribute( "temp_InfoChanged");
-                application.distribute( "humi_InfoChanged");
-                application.distribute( "lumi_InfoChanged");
-                
-                application.distribute( "mintempChanged");
-                application.distribute( "maxtempChanged");
-                application.distribute( "humiChanged");
-                application.distribute( "lumiChanged");
-                
-                application.distribute( "lumi_autoChanged");
-                application.distribute( "lumi_auto_numChanged");
-                
-                application.distribute( "humi_autoChanged");
-                application.distribute( "humi_auto_numChanged");
-
+                	if(json.temp_min!=null){
+                		temp_min=json.temp_min;
+                		application.distribute( "mintempChanged");
+                	}
+                	if(json.temp_max!=null){
+                		temp_max=json.temp_max;
+                		application.distribute( "maxtempChanged");
+                	}
+                	if(json.lumi_exp!=null){
+                		lumi_exp=json.lumi_exp;
+                		application.distribute( "lumiChanged");
+                	}
+                	if(json.humi_exp!=null){
+                		humi_exp=json.humi_exp;
+                		application.distribute( "humiChanged");
+                	}
+                	if(json.lumi_auto!=null){
+                		led_auto=json.lumi_auto;
+                		application.distribute( "lumi_autoChanged");
+                		application.distribute( "lumi_auto_numChanged");
+                	}
+                	if(json.humi_auto!=null){
+                		water_auto=json.humi_auto;
+                		application.distribute( "humi_autoChanged");
+                		application.distribute( "humi_auto_numChanged");
+                	}
+                	
+                	if(json.humi!=null){
+                		humi_Info=json.humi;
+                		application.distribute( "humi_InfoChanged");
+                	}
+                	if(json.temp!=null){
+                		temp_Info=json.temp;
+                		application.distribute( "temp_InfoChanged");
+                	}
+                	if(json.lumi!=null){
+                		lumi_Info=json.lumi;
+                		application.distribute( "lumi_InfoChanged");
+                	}
+            
+               
  /*               
                 application.distribute( "maxtempChanged", temp_max );
                 application.distribute( "mintempChanged", temp_min );
