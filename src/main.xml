@@ -70,6 +70,12 @@
                 application.distribute( "maxtempChanged");
                 application.distribute( "humiChanged");
                 application.distribute( "lumiChanged");
+                
+                application.distribute( "lumi_autoChanged");
+                application.distribute( "lumi_auto_numChanged");
+                
+                application.distribute( "humi_autoChanged");
+                application.distribute( "humi_auto_numChanged");
 
  /*               
                 application.distribute( "maxtempChanged", temp_max );
@@ -136,11 +142,14 @@
         <method id="onTouchBegan" params="label">
         </method>
         <method id="onTouchEnded" params="label">
-            label.skin = button_wet_Skin_L;
             this.onTap(label);
         </method>
         <method id="onTap" params="label">
              trace(label.string);
+        </method>
+        <method id="humi_auto_numChanged" params="label">
+            if(water_auto==0)label.skin = graySkin;
+            else label.skin = button_wet_Skin_L;
         </method>
     </behavior>
     <behavior id="ButtonBehavior_expwet_setting">
@@ -153,11 +162,14 @@
         <method id="onTouchBegan" params="label">
         </method>
         <method id="onTouchEnded" params="label">
-            label.skin = button_wet_Skin_L;
             this.onTap(label);
         </method>
         <method id="onTap" params="label">
              trace(label.string);
+        </method>
+        <method id="humi_autoChanged" params="label">
+            if(water_auto==0)label.skin = graySkin;
+            else label.skin = button_wet_Skin_L;
         </method>
     </behavior>
     <behavior id="ButtonBehavior_explig_num_setting">
@@ -177,11 +189,9 @@
         <method id="onTap" params="label">
              trace(label.string);
         </method>
-        <method id="num_turngray" params="label">
-            label.skin = graySkin;
-        </method>
-        <method id="num_turnback" params="label">
-            label.skin = button_light_Skin_L;
+        <method id="lumi_autoChanged" params="label">
+            if(led_auto==0)label.skin = graySkin;
+            else label.skin = button_light_Skin_L;
         </method>
     </behavior>
     <behavior id="ButtonBehavior_explig_setting">
@@ -200,11 +210,9 @@
         <method id="onTap" params="label">
              trace(label.string);
         </method>
-        <method id="turngray" params="label">
-            label.skin = graySkin;
-        </method>
-        <method id="turnback" params="label">
-            label.skin = button_light_Skin_L;
+        <method id="lumi_auto_numChanged" params="label">
+            if(led_auto==0)label.skin = graySkin;
+            else label.skin = button_light_Skin_L;
         </method>
     </behavior>
     <behavior id="ButtonBehavior_temp">
@@ -417,12 +425,10 @@
             <line top="0" left="0" bottom="0" right="0">
                 <label string="'Soil Humidity'">
                     <behavior like="ButtonBehavior_wet">
-                        <method id="onTap" params="label">label.invoke(new Message("/water_setting"));</method>
                     </behavior>
                 </label>
                 <label string="'50 %'">
                     <behavior like="ButtonBehavior_wet_num">
-                        <method id="onTap" params="label">label.invoke(new Message("/water_setting"));</method>
                     </behavior>
                 </label>
             </line>
@@ -566,20 +572,39 @@
         <behavior>
             <method id="onInvoke" params="handler, message">
                 <![CDATA[
-                if(led_auto==0){
-                    application.distribute( "turngray");
-                    application.distribute( "num_turngray");
-                    led_auto=1;
-                }
-                if(led_auto==1){ 
-                    led_auto=0;
-                    application.distribute( "turnback");
-                    application.distribute( "num_turnback");
-                }
+                
+                if (led_auto==0) 
+                	var unled_auto=1;
+                else 
+                	var unled_auto=0;
                 var saeurl = "http://xijincheng.sinaapp.com/phone";
 				var message_sae = new Message(saeurl);
 				message_sae.method = "POST";
-				message_sae.requestText = encodeURI("lumi_auto="+led_auto);
+				message_sae.requestText = encodeURI("lumi_auto="+unled_auto);
+				message_sae.setRequestHeader("Content-Length", message_sae.requestText.length);
+				message_sae.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				handler.invoke(message_sae, Message.TEXT);           
+            ]]>
+            </method>
+            <method id="onComplete" params="handler, message, text"><![CDATA[
+                trace(text);
+            ]]></method>
+        </behavior>
+    </handler>
+    
+    <handler path="/water_setting">
+        <behavior>
+            <method id="onInvoke" params="handler, message">
+                <![CDATA[
+                
+                if (water_auto==0) 
+                	var unwater_auto=1;
+                else 
+                	var unwater_auto=0;
+                var saeurl = "http://xijincheng.sinaapp.com/phone";
+				var message_sae = new Message(saeurl);
+				message_sae.method = "POST";
+				message_sae.requestText = encodeURI("humi_auto="+unwater_auto);
 				message_sae.setRequestHeader("Content-Length", message_sae.requestText.length);
 				message_sae.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 				handler.invoke(message_sae, Message.TEXT);           
