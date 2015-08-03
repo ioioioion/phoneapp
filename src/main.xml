@@ -567,13 +567,15 @@
             <method id="onInvoke" params="handler, message">
                 <![CDATA[
                 if(led_auto==0){
-                application.distribute( "turngray");
-                application.distribute( "num_turngray");
-                led_auto=1;}
+                    application.distribute( "turngray");
+                    application.distribute( "num_turngray");
+                    led_auto=1;
+                }
                 if(led_auto==1){ 
-                led_auto=0;
-                application.distribute( "turnback");
-                application.distribute( "num_turnback");}
+                    led_auto=0;
+                    application.distribute( "turnback");
+                    application.distribute( "num_turnback");
+                }
                 var saeurl = "http://xijincheng.sinaapp.com/phone";
 				var message_sae = new Message(saeurl);
 				message_sae.method = "POST";
