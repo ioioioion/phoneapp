@@ -79,6 +79,9 @@
             ]]></method>
         </behavior>
     </handler>
+    
+    
+    
     <behavior id="ButtonBehavior_maxtemp_setting">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
@@ -342,6 +345,7 @@
             label.skin = hiliteSkin;
         </method>
         <method id="onTouchEnded" params="label">
+            this.onTap(label);
         </method>
         <method id="onTimeChanged" params="label"><![CDATA[
                 label.invoke(new Message("/pull"));
@@ -433,6 +437,7 @@
             <line top="0" left="0" bottom="0" right="0">
 	            <label string="'Setting'">
 	                <behavior like="ButtonBehavior_setting">
+                        <method id="onTap" params="label">label.invoke(new Message("/setting"));</method>
 	                </behavior>
 	            </label>
 	        </line>
@@ -444,4 +449,59 @@
     		application.add( new MainScreen() );
         ]]>
     </script>
+    
+    
+    <handler path="/setting">
+        <behavior like="MODEL.DialogBehavior">
+             <method id="onDescribe" params="query">
+                return {
+                    Dialog: DIALOG.Box,
+                    title: "Setting",
+                    items: [
+                        {
+                            Item: DIALOG.Slider,
+                            id: "lumi_exp",
+                            label: "Set Luminance",
+                            min: 0,
+                            max: 10000,
+                            value: lumi_exp,
+                            toString: function(val) { return Math.floor(val); }, 
+                        },
+                        {
+                            Item: DIALOG.Slider,
+                            id: "lumi_exp",
+                            label: "Set Luminance",
+                            min: 0,
+                            max: 10000,
+                            value: lumi_exp,
+                            toString: function(val) { return Math.floor(val); }, 
+                        },
+                        {
+                            Item: DIALOG.Slider,
+                            id: "lumi_exp",
+                            label: "Set Luminance",
+                            min: 0,
+                            max: 10000,
+                            value: lumi_exp,
+                            toString: function(val) { return Math.floor(val); }, 
+                        },
+                        {
+                            Item: DIALOG.Slider,
+                            id: "lumi_exp",
+                            label: "Set Luminance",
+                            min: 0,
+                            max: 10000,
+                            value: lumi_exp,
+                            toString: function(val) { return Math.floor(val); }, 
+                        }
+                    ],
+                    ok: "Comfirm",
+                    cancel: "Close",
+                    action: "/light_set",
+                };
+            </method>
+        </behavior>
+    </handler> 
 </program>
+
+
