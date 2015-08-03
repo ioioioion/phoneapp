@@ -61,6 +61,16 @@
                 humi_Info=json.humi;
                 temp_Info=json.temp;
                 lumi_Info=json.lumi;
+
+                application.distribute( "temp_InfoChanged");
+                application.distribute( "humi_InfoChanged");
+                application.distribute( "lumi_InfoChanged");
+                
+                application.distribute( "mintempChanged");
+                application.distribute( "maxtempChanged");
+                application.distribute( "humiChanged");
+                application.distribute( "lumiChanged");
+
  /*               
                 application.distribute( "maxtempChanged", temp_max );
                 application.distribute( "mintempChanged", temp_min );
@@ -153,35 +163,48 @@
     <behavior id="ButtonBehavior_explig_num_setting">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
-            label.skin = button_light_Skin_L;
+            label.skin = graySkin;
             label.style = t_smalllabelStyle;
             label.active = true;
         </method>
         <method id="onTouchBegan" params="label">
         </method>
         <method id="onTouchEnded" params="label">
-            label.skin = button_light_Skin_L;
+
             this.onTap(label);
+            
         </method>
         <method id="onTap" params="label">
              trace(label.string);
+        </method>
+        <method id="num_turngray" params="label">
+            label.skin = graySkin;
+        </method>
+        <method id="num_turnback" params="label">
+            label.skin = button_light_Skin_L;
         </method>
     </behavior>
     <behavior id="ButtonBehavior_explig_setting">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
-            label.skin = button_light_Skin_L;
+            label.skin = graySkin;
             label.style = b_smalllabelStyle;
             label.active = true;
         </method>
         <method id="onTouchBegan" params="label">
         </method>
         <method id="onTouchEnded" params="label">
-            label.skin = button_light_Skin_L;
+
             this.onTap(label);
         </method>
         <method id="onTap" params="label">
              trace(label.string);
+        </method>
+        <method id="turngray" params="label">
+            label.skin = graySkin;
+        </method>
+        <method id="turnback" params="label">
+            label.skin = button_light_Skin_L;
         </method>
     </behavior>
     <behavior id="ButtonBehavior_temp">
@@ -219,6 +242,9 @@
         </method>
         <method id="tempChanged" params="content,result"><![CDATA[
                     content.string = result.toFixed(2) + " °C";
+     ]]></method>
+        <method id="temp_InfoChanged" params="label"><![CDATA[
+             label.string = eval(temp_Info).toFixed(2) + " °C";
      ]]></method>
     </behavior>
     
@@ -260,6 +286,10 @@
              var temp = result;
              content.string = temp.toFixed(2) + " %";
      ]]></method>
+        <method id="humi_InfoChanged" params="label"><![CDATA[
+            		//Converts voltage result to temperature. 
+             label.string = eval(humi_Info).toFixed(2) + " %";
+     ]]></method>
     </behavior>
     
     <behavior id="ButtonBehavior_light">
@@ -298,6 +328,10 @@
         </method>
         <method id="lxChanged" params="content,result"><![CDATA[
              content.string = result.toFixed(2) + " lx";
+     ]]></method>
+        <method id="lumi_InfoChanged" params="label"><![CDATA[
+            		//Converts voltage result to temperature. 
+             label.string = eval(lumi_Info).toFixed(2) + " %";
      ]]></method>
     </behavior>
     
@@ -410,12 +444,10 @@
             <line top="0" left="0" bottom="0" right="0">
                 <label string="'Luminance'">
                     <behavior like="ButtonBehavior_light">
-                        <method id="onTap" params="label">label.invoke(new Message("/light_setting"));</method>
                     </behavior>
                 </label>
                 <label string="'70 lx'">
                     <behavior like="ButtonBehavior_light_num">
-                        <method id="onTap" params="label">label.invoke(new Message("/light_setting"));</method>
                     </behavior>
                 </label>
             </line>
@@ -427,7 +459,7 @@
                 </label>
                 <label string="'70 lx'">
                     <behavior like="ButtonBehavior_explig_num_setting">
-                        <method id="onTap" params="label">label.invoke(new Message("/setting"));</method>
+                        <method id="onTap" params="label">label.invoke(new Message("/light_setting"));</method>
                         <method id="lumiChanged" params="label"><![CDATA[
                    			 label.string= lumi_exp + " lx";
     					 ]]></method>
@@ -478,22 +510,23 @@
                         },
                         {
                             Item: DIALOG.Slider,
-                            id: "temp_max",
-                            label: "Set Temperature Max",
-                            min: 0,
-                            max: 50,
-                            value: temp_max,
-                            toString: function(val) { return Math.floor(val); }, 
-                        },
-                        {
-                            Item: DIALOG.Slider,
                             id: "temp_min",
                             label: "Set Temperature Min",
                             min: 0,
                             max: 50,
                             value: temp_min,
                             toString: function(val) { return Math.floor(val); }, 
+                        },
+                        {
+                            Item: DIALOG.Slider,
+                            id: "temp_max",
+                            label: "Set Temperature Max",
+                            min: 0,
+                            max: 50,
+                            value: temp_max,
+                            toString: function(val) { return Math.floor(val); }, 
                         }
+                        
                     ],
                     ok: "Comfirm",
                     cancel: "Close",
@@ -529,6 +562,30 @@
             ]]></method>
         </behavior>
     </handler>
+    <handler path="/light_setting">
+        <behavior>
+            <method id="onInvoke" params="handler, message">
+                <![CDATA[
+                if(led_auto==0){
+                application.distribute( "turngray");
+                application.distribute( "num_turngray");
+                led_auto=1;}
+                if(led_auto==1){ 
+                led_auto=0;
+                application.distribute( "turnback");
+                application.distribute( "num_turnback");}
+                var saeurl = "http://xijincheng.sinaapp.com/phone";
+				var message_sae = new Message(saeurl);
+				message_sae.method = "POST";
+				message_sae.requestText = encodeURI("lumi_auto="+led_auto);
+				message_sae.setRequestHeader("Content-Length", message_sae.requestText.length);
+				message_sae.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				handler.invoke(message_sae, Message.TEXT);           
+            ]]>
+            </method>
+            <method id="onComplete" params="handler, message, text"><![CDATA[
+                trace(text);
+            ]]></method>
+        </behavior>
+    </handler>
 </program>
-
-
