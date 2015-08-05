@@ -397,6 +397,7 @@
             label.skin = hiliteSkin;
         </method>
         <method id="onTouchEnded" params="label">
+            label.skin = button_setting_Skin;
             this.onTap(label);
         </method>
         <method id="onTimeChanged" params="label"><![CDATA[
