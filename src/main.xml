@@ -31,14 +31,10 @@
     <skin id="button_led_Skin_L" color="#1D1D1D"/>
     <skin id="hiliteSkin" color="#333333"/>
     <skin id="dummuSkin" color="red"/>
-    <style id="textStyle" font="24px" color="white" align="center,middle"/>
-    <style id="headerStyle" font="bold 16px" color="#444" align="center,middle"/>
-    <style id="buttonStyle" font="bold 16px" color="white" align="center,middle"/>
-    <style id="labelStyle" font="24px" color="white" align="center,middle"/>
-    <style id="b_smalllabelStyle" font=" 24px" color="white" align="center,middle"/>
-    <style id="t_smalllabelStyle" font=" 24px" color="white" align="center,middle"/>
-    <style id="biglabelStyle" font="bold 24px" color="white" align="center,middle"/>
-    <style id="numStyle" font="26px" color="white" align="center,middle"/>
+
+    <style id="leftStyle" font="24px" color="white" align="center,left"/>
+    <style id="rightStyle" font="bold 24px" color="white" align="center,right"/>
+    <style id="middleStyle" font="bold 26px" color="white" align="center,middle"/>
 
     <handler path="/pull">
     	<behavior>
@@ -108,11 +104,11 @@
     
     
     
-    <behavior id="ButtonBehavior_maxtemp_setting">
+    <behavior id="LabelBehavior_max_temp">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
             label.skin = button_temp_Skin_L;
-            label.style = t_smalllabelStyle;
+            label.style = middleStyle;
             label.active = true;
         </method>
         <method id="onTouchBegan" params="label">
@@ -125,11 +121,11 @@
             trace(label.string);
         </method>
     </behavior>
-    <behavior id="ButtonBehavior_mintemp_setting">
+    <behavior id="LabelBehavior_min_temp">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
             label.skin = button_temp_Skin_L;
-            label.style = b_smalllabelStyle;
+            label.style = middleStyle;
             label.active = true;
         </method>
         <method id="onTouchBegan" params="label">
@@ -142,11 +138,9 @@
              trace(label.string);
         </method>
     </behavior>
-    <behavior id="ButtonBehavior_expwet_num_setting">
+    <behavior id="LabelBehavior_exp_humi">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
-            label.skin = button_wet_Skin_L;
-            label.style = t_smalllabelStyle;
             label.active = true;
         </method>
         <method id="onTouchBegan" params="label">
@@ -155,231 +149,120 @@
             this.onTap(label);
         </method>
         <method id="onTap" params="label">
-             trace(label.string);
-        </method>
-        <method id="humi_auto_numChanged" params="label">
-            if(water_auto==0)label.skin = graySkin;
-            else label.skin = button_wet_Skin_L;
+            label.invoke(new Message("/water_setting"));
         </method>
     </behavior>
-    <behavior id="ButtonBehavior_expwet_setting">
-        <method id="onCreate" params="label">
-            label.coordinates = {top:0, bottom:0, left:0, right:0};
-            label.skin = button_wet_Skin_L;
-            label.style = b_smalllabelStyle;
-            label.active = true;
+    <behavior id="LineBehavior_exp_humi">
+        <method id="onCreate" params="line">
+            line.skin = button_wet_Skin_L;
         </method>
-        <method id="onTouchBegan" params="label">
+        <method id="onTouchBegan" params="line">
         </method>
-        <method id="onTouchEnded" params="label">
-            this.onTap(label);
+        <method id="onTouchEnded" params="line">
+            this.onTap(line);
         </method>
-        <method id="onTap" params="label">
-             trace(label.string);
-        </method>
-        <method id="humi_autoChanged" params="label">
-            if(water_auto==0)label.skin = graySkin;
-            else label.skin = button_wet_Skin_L;
-        </method>
-    </behavior>
-    <behavior id="ButtonBehavior_explig_num_setting">
-        <method id="onCreate" params="label">
-            label.coordinates = {top:0, bottom:0, left:0, right:0};
-            label.skin = graySkin;
-            label.style = t_smalllabelStyle;
-            label.active = true;
-        </method>
-        <method id="onTouchBegan" params="label">
-        </method>
-        <method id="onTouchEnded" params="label">
+        <method id="onTap" params="line">
 
-            this.onTap(label);
-            
         </method>
-        <method id="onTap" params="label">
-             trace(label.string);
-        </method>
-        <method id="lumi_autoChanged" params="label">
-            if(led_auto==0)label.skin = graySkin;
-            else label.skin = button_light_Skin_L;
+        <method id="humi_autoChanged" params="line">
+            if(water_auto==0)
+                line.skin = graySkin;
+            else 
+                line.skin = button_wet_Skin_L;
         </method>
     </behavior>
-    <behavior id="ButtonBehavior_explig_setting">
+    <behavior id="LabelBehavior_exp_lumi">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
-            label.skin = graySkin;
-            label.style = b_smalllabelStyle;
             label.active = true;
         </method>
         <method id="onTouchBegan" params="label">
         </method>
         <method id="onTouchEnded" params="label">
-
             this.onTap(label);
         </method>
         <method id="onTap" params="label">
-             trace(label.string);
+            label.invoke(new Message("/light_setting"));
+        </method>       
+    </behavior>
+    <behavior id="LineBehavior_exp_lumi">
+        <method id="onCreate" params="line">
+            line.skin = graySkin;
         </method>
-        <method id="lumi_auto_numChanged" params="label">
-            if(led_auto==0)label.skin = graySkin;
-            else label.skin = button_light_Skin_L;
+        <method id="onTouchBegan" params="line">
+        </method>
+        <method id="onTouchEnded" params="line">
+            this.onTap(line);
+        </method>
+        <method id="onTap" params="line">
+        </method>
+        <method id="lumi_auto_numChanged" params="line">
+            if(led_auto==0)
+                line.skin = graySkin;
+            else 
+                line.skin = button_light_Skin_L;
         </method>
     </behavior>
-    <behavior id="ButtonBehavior_temp">
+    <behavior id="LabelBehavior_temp">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
             label.skin = button_temp_Skin;
-            label.style = labelStyle;
+            label.style = middleStyle;
             label.active = true;
         </method>
-        <method id="onTouchBegan" params="label">
-        </method>
-        <method id="onTouchEnded" params="label">
-            label.skin = button_temp_Skin;
-            this.onTap(label);
-        </method>
-        <method id="onTap" params="label">
-             trace(label.string);
-        </method>
     </behavior>
-        <behavior id="ButtonBehavior_temp_num">
+        <behavior id="LabelBehavior_temp_num">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
             label.skin = button_temp_Skin;
-            label.style = numStyle;
+            label.style = middleStyle;
             label.active = true;
         </method>
-        <method id="onTouchBegan" params="label">
-        </method>
-        <method id="onTouchEnded" params="label">
-            label.skin = button_temp_Skin;
-            this.onTap(label);
-        </method>
-        <method id="onTap" params="label">
-             trace(label.string);
-        </method>
-        <method id="tempChanged" params="content,result"><![CDATA[
-                    content.string = result.toFixed(2) + " °C";
-     ]]></method>
         <method id="temp_InfoChanged" params="label"><![CDATA[
-             label.string = eval(temp_Info).toFixed(2) + " °C";
+             label.string = temp_Info + " °C";
      ]]></method>
     </behavior>
     
-    <behavior id="ButtonBehavior_wet">
+    <behavior id="LabelBehavior_humi">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
             label.skin = button_wet_Skin;
-            label.style = labelStyle;
+            label.style = middleStyle;
             label.active = true;
-        </method>
-        <method id="onTouchBegan" params="label">
-        </method>
-        <method id="onTouchEnded" params="label">
-            label.skin = button_wet_Skin;
-            this.onTap(label);
-        </method>
-        <method id="onTap" params="label">
-             trace(label.string);
         </method>
     </behavior>
-    <behavior id="ButtonBehavior_wet_num">
+    <behavior id="LabelBehavior_humi_num">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
             label.skin = button_wet_Skin;
-            label.style = numStyle;
+            label.style = middleStyle;
             label.active = true;
         </method>
-        <method id="onTouchBegan" params="label">
-        </method>
-        <method id="onTouchEnded" params="label">
-            label.skin = button_wet_Skin;
-            this.onTap(label);
-        </method>
-        <method id="onTap" params="label">
-             trace(label.string);
-        </method>
-        <method id="wetChanged" params="content,result"><![CDATA[
-            		//Converts voltage result to temperature. 
-             var temp = result;
-             content.string = temp.toFixed(2) + " %";
-     ]]></method>
         <method id="humi_InfoChanged" params="label"><![CDATA[
-            		//Converts voltage result to temperature. 
-             label.string = eval(humi_Info).toFixed(2) + " %";
+             label.string = humi_Info + " %";
      ]]></method>
     </behavior>
     
-    <behavior id="ButtonBehavior_light">
+    <behavior id="LabelBehavior_lumi">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
             label.skin = button_light_Skin;
-            label.style = labelStyle;
+            label.style = middleStyle;
             label.active = true;
-        </method>
-        <method id="onTouchBegan" params="label">
-        </method>
-        <method id="onTouchEnded" params="label">
-            label.skin = button_light_Skin;
-            this.onTap(label);
-        </method>
-        <method id="onTap" params="label">
-            trace(label.string);
         </method>
     </behavior>
     
-    <behavior id="ButtonBehavior_light_num">
+    <behavior id="LabelBehavior_lumi_num">
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
             label.skin = button_light_Skin;
-            label.style = numStyle;
+            label.style = middleStyle;
             label.active = true;
         </method>
-        <method id="onTouchBegan" params="label">
-        </method>
-        <method id="onTouchEnded" params="label">
-            label.skin = button_light_Skin;
-            this.onTap(label);
-        </method>
-        <method id="onTap" params="label">
-             trace(label.string);
-        </method>
-        <method id="lxChanged" params="content,result"><![CDATA[
-             content.string = result.toFixed(2) + " lx";
-     ]]></method>
         <method id="lumi_InfoChanged" params="label"><![CDATA[
-            		//Converts voltage result to temperature. 
-             label.string = eval(lumi_Info).toFixed(2) + " %";
+             label.string = lumi_Info + " lx";
      ]]></method>
     </behavior>
-    
-    <behavior id="ButtonBehavior_water">
-        <method id="onCreate" params="label">
-            label.coordinates = {top:0, bottom:0, left:0, right:0};
-            label.skin = button_water_Skin;
-            label.style = biglabelStyle;
-            label.active = true;
-        </method>
-        <method id="onTouchBegan" params="label">
-            label.skin = hiliteSkin;
-        </method>
-        <method id="onTouchEnded" params="label">
-        </method>
-    </behavior>
-    
-    <behavior id="ButtonBehavior_led">
-        <method id="onCreate" params="label">
-            label.coordinates = {top:0, bottom:0, left:0, right:0};
-            label.skin = button_led_Skin;
-            label.style = biglabelStyle;
-            label.active = true;
-        </method>
-        <method id="onTouchBegan" params="label">
-            label.skin = hiliteSkin;
-        </method>
-        <method id="onTouchEnded" params="label">
-        </method>
-    </behavior>    
     
     
     
@@ -388,7 +271,7 @@
         <method id="onCreate" params="label">
             label.coordinates = {top:0, bottom:0, left:0, right:0};
             label.skin = button_setting_Skin;
-            label.style = biglabelStyle;
+            label.style = middleStyle;
             label.active = true;
             label.interval = 2000;
             label.start(); 
@@ -406,26 +289,26 @@
     </behavior>
 	<container id="MainScreen" top="0" left="0" bottom="0" right="0" skin="backgroundSkin">
 	    <column top="0" left="0" bottom="0" right="0">
-            <line top="0" left="0" bottom="0" right="0">
+            <line top="2" left="2" bottom="0" right="2">
                 <label string="'Temperature'">
-                    <behavior like="ButtonBehavior_temp">
+                    <behavior like="LabelBehavior_temp">
                     </behavior>
                 </label>
                 <label string="'50 °C'">
-                    <behavior like="ButtonBehavior_temp_num">
+                    <behavior like="LabelBehavior_temp_num">
                     </behavior>
                 </label>
             </line>
-            <line top="0" left="0" bottom="0" right="0">
+            <line top="2" left="2" bottom="0" right="2">
                 <label string="'Min:0 °C'">
-                    <behavior like="ButtonBehavior_mintemp_setting">
+                    <behavior like="LabelBehavior_min_temp">
                         <method id="mintempChanged" params="label"><![CDATA[
                    			 label.string= "Min:" + temp_min + " °C";
     					 ]]></method>
                     </behavior>
                 </label>
                 <label string="'Max:0 °C'">
-                    <behavior like="ButtonBehavior_maxtemp_setting">
+                    <behavior like="LabelBehavior_max_temp">
                         <method id="onTap" params="label">label.invoke(new Message("/temp_setting"));</method>
                         <method id="maxtempChanged" params="label"><![CDATA[
                    			 label.string= "Max:" + temp_max + " °C";
@@ -433,57 +316,57 @@
                     </behavior>
                 </label>
             </line>
-            <line top="0" left="0" bottom="0" right="0">
+            <line top="2" left="2" bottom="0" right="2">
                 <label string="'Soil Humidity'">
-                    <behavior like="ButtonBehavior_wet">
+                    <behavior like="LabelBehavior_humi">
                     </behavior>
                 </label>
                 <label string="'50 %'">
-                    <behavior like="ButtonBehavior_wet_num">
+                    <behavior like="LabelBehavior_humi_num">
                     </behavior>
                 </label>
             </line>
-            <line top="0" left="0" bottom="0" right="0">
+            <line top="2" left="2" bottom="0" right="2">
                 <label string="'Luminance'">
-                    <behavior like="ButtonBehavior_light">
+                    <behavior like="LabelBehavior_lumi">
                     </behavior>
                 </label>
-                <label string="'70 lx'">
-                    <behavior like="ButtonBehavior_light_num">
+                <label string="'0 lx'">
+                    <behavior like="LabelBehavior_lumi_num">
                     </behavior>
                 </label>
             </line>
-            <line top="0" left="0" bottom="0" right="0">
-                <label string="'Exp Humidity'">
-                    <behavior like="ButtonBehavior_expwet_setting">
-                        <method id="onTap" params="label">label.invoke(new Message("/water_setting"));</method>
+            <line top="2" left="2" bottom="0" right="2">
+                <behavior like="LineBehavior_exp_humi">
+                </behavior>
+                <label string="'Exp Humidity'" style = "middleStyle">
+                    <behavior like="LabelBehavior_exp_humi">
                     </behavior>
                 </label>
-                <label string="'50 %'">
-                    <behavior like="ButtonBehavior_expwet_num_setting">
-                        <method id="onTap" params="label">label.invoke(new Message("/water_setting"));</method>
+                <label string="'0 %'" style = "middleStyle">
+                    <behavior like="LabelBehavior_exp_humi"  >
                         <method id="humiChanged" params="label"><![CDATA[
                    			 label.string= humi_exp + " %";
     					 ]]></method>
                     </behavior>
                 </label>
             </line>
-            <line top="0" left="0" bottom="0" right="0">
-                <label string="'Exp Luminance'">
-                    <behavior like="ButtonBehavior_explig_setting">
-                        <method id="onTap" params="label">label.invoke(new Message("/light_setting"));</method>
+            <line top="2" left="2" bottom="0" right="2">
+                <behavior like="LineBehavior_exp_lumi">
+                </behavior>
+                <label string="'Exp Luminance'" style = "middleStyle">
+                    <behavior like="LabelBehavior_exp_lumi" >
                     </behavior>
                 </label>
-                <label string="'70 lx'">
-                    <behavior like="ButtonBehavior_explig_num_setting">
-                        <method id="onTap" params="label">label.invoke(new Message("/light_setting"));</method>
+                <label string="'0 lx'" style = "middleStyle">
+                    <behavior like="LabelBehavior_exp_lumi">
                         <method id="lumiChanged" params="label"><![CDATA[
                    			 label.string= lumi_exp + " lx";
     					 ]]></method>
                     </behavior>
                 </label>
             </line>
-            <line top="0" left="0" bottom="0" right="0">
+            <line top="2" left="2" bottom="2" right="2">
 	            <label string="'Setting'">
 	                <behavior like="ButtonBehavior_setting">
                         <method id="onTap" params="label">label.invoke(new Message("/setting"));</method>
