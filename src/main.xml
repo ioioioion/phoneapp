@@ -144,6 +144,7 @@
             label.active = true;
         </method>
         <method id="onTouchBegan" params="label">
+            application.distribute( "exp_humi_pressed");
         </method>
         <method id="onTouchEnded" params="label">
             this.onTap(label);
@@ -164,6 +165,9 @@
         <method id="onTap" params="line">
 
         </method>
+        <method id="exp_humi_pressed" params="line">
+            line.skin = hiliteSkin;
+        </method>
         <method id="humi_autoChanged" params="line">
             if(water_auto==0)
                 line.skin = graySkin;
@@ -177,6 +181,7 @@
             label.active = true;
         </method>
         <method id="onTouchBegan" params="label">
+            application.distribute( "exp_lumi_pressed");            
         </method>
         <method id="onTouchEnded" params="label">
             this.onTap(label);
@@ -195,6 +200,9 @@
             this.onTap(line);
         </method>
         <method id="onTap" params="line">
+        </method>
+        <method id="exp_lumi_pressed" params="line">
+            line.skin = hiliteSkin;
         </method>
         <method id="lumi_auto_numChanged" params="line">
             if(led_auto==0)
