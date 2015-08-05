@@ -99,13 +99,7 @@
                 application.distribute( "humiChanged", humi_exp );
                 application.distribute( "lumiChanged", lumi_exp );
 */              
-				trace(json.temp_min); 
-				trace(json.temp_max); 
-				trace(json.lumi_exp); 
-				trace(json.humi_exp); 
-                trace(json.humi_auto); 
-                trace(json.lumi_auto); 
-                                                		 
+     		 
 
               }
             ]]></method>
@@ -449,7 +443,17 @@
                 </label>
             </line>
             <line top="0" left="0" bottom="0" right="0">
-                <label string="'Expected:'">
+                <label string="'Luminance'">
+                    <behavior like="ButtonBehavior_light">
+                    </behavior>
+                </label>
+                <label string="'70 lx'">
+                    <behavior like="ButtonBehavior_light_num">
+                    </behavior>
+                </label>
+            </line>
+            <line top="0" left="0" bottom="0" right="0">
+                <label string="'Exp Humidity'">
                     <behavior like="ButtonBehavior_expwet_setting">
                         <method id="onTap" params="label">label.invoke(new Message("/water_setting"));</method>
                     </behavior>
@@ -464,17 +468,7 @@
                 </label>
             </line>
             <line top="0" left="0" bottom="0" right="0">
-                <label string="'Luminance'">
-                    <behavior like="ButtonBehavior_light">
-                    </behavior>
-                </label>
-                <label string="'70 lx'">
-                    <behavior like="ButtonBehavior_light_num">
-                    </behavior>
-                </label>
-            </line>
-            <line top="0" left="0" bottom="0" right="0">
-                <label string="'Expected:'">
+                <label string="'Exp Luminance'">
                     <behavior like="ButtonBehavior_explig_setting">
                         <method id="onTap" params="label">label.invoke(new Message("/light_setting"));</method>
                     </behavior>
@@ -580,7 +574,7 @@
             ]]>
             </method>
             <method id="onComplete" params="handler, message, text"><![CDATA[
-                trace(text);
+           //     trace(text);
             ]]></method>
         </behavior>
     </handler>
@@ -603,7 +597,7 @@
             ]]>
             </method>
             <method id="onComplete" params="handler, message, text"><![CDATA[
-                trace(text);
+            //    trace(text);
             ]]></method>
         </behavior>
     </handler>
@@ -627,7 +621,7 @@
             ]]>
             </method>
             <method id="onComplete" params="handler, message, text"><![CDATA[
-                trace(text);
+            //    trace(text);
             ]]></method>
         </behavior>
     </handler>
