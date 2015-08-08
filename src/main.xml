@@ -8,8 +8,8 @@
     <variable id="temp_min" value="0"/>
     <variable id="temp_max" value="0"/>
    	<variable id="lumi_exp" value="0"/>
-    <variable id="led_auto" value="0"/>
-    <variable id="water_auto" value="0"/>
+    <variable id="lumi_auto" value="0"/>
+    <variable id="humi_auto" value="0"/>
     <variable id="temp_Info" value="0"/>
     <variable id="lumi_Info" value="0"/>
     <variable id="humi_Info" value="0"/>
@@ -47,46 +47,46 @@
 			]]></method>
             <method id="onComplete" params="handler, message, json"><![CDATA[
                 //Receives result and passes to main container.
-                if(json!=undefined){
-                	if(json.temp_min!=null){
-                		temp_min=json.temp_min;
+           //     if(json!=undefined){
+            //    	if(json.temp_min!=null){
+             //   		temp_min=json.temp_min;
                 		application.distribute( "mintempChanged");
-                	}
-                	if(json.temp_max!=null){
-                		temp_max=json.temp_max;
+             //   	}
+              //  	if(json.temp_max!=null){
+               // 		temp_max=json.temp_max;
                 		application.distribute( "maxtempChanged");
-                	}
-                	if(json.lumi_exp!=null){
-                		lumi_exp=json.lumi_exp;
+              //  	}
+              //  	if(json.lumi_exp!=null){
+              //  		lumi_exp=json.lumi_exp;
                 		application.distribute( "lumiChanged");
-                	}
-                	if(json.humi_exp!=null){
-                		humi_exp=json.humi_exp;
+              //  	}
+              //  	if(json.humi_exp!=null){
+              //  		humi_exp=json.humi_exp;
                 		application.distribute( "humiChanged");
-                	}
-                	if(json.lumi_auto!=null){
-                		led_auto=json.lumi_auto;
+              //  	}
+               // 	if(json.lumi_auto!=null){
+              //  		lumi_auto=json.lumi_auto;
                 		application.distribute( "lumi_autoChanged");
                 		application.distribute( "lumi_auto_numChanged");
-                	}
-                	if(json.humi_auto!=null){
-                		water_auto=json.humi_auto;
+               // 	}
+                //	if(json.humi_auto!=null){
+                //		humi_auto=json.humi_auto;
                 		application.distribute( "humi_autoChanged");
                 		application.distribute( "humi_auto_numChanged");
-                	}
+              //  	}
                 	
-                	if(json.humi!=null){
-                		humi_Info=json.humi;
+              //  	if(json.humi!=null){
+              //  		humi_Info=json.humi;
                 		application.distribute( "humi_InfoChanged");
-                	}
-                	if(json.temp!=null){
-                		temp_Info=json.temp;
+               // 	}
+               // 	if(json.temp!=null){
+                //		temp_Info=json.temp;
                 		application.distribute( "temp_InfoChanged");
-                	}
-                	if(json.lumi!=null){
-                		lumi_Info=json.lumi;
+              //  	}
+              //  	if(json.lumi!=null){
+              //  		lumi_Info=json.lumi;
                 		application.distribute( "lumi_InfoChanged");
-                	}
+              //  	}
             
                
  /*               
@@ -97,12 +97,27 @@
 */              
      		 
 
-              }
+  //            }
             ]]></method>
         </behavior>
     </handler>
     
-    
+    <handler path="/getUrl">
+    	<behavior>
+    		<method id="onInvoke" params="handler, message"><![CDATA[
+                //Receives result and passes to main container.
+                var posturl = "http://kinomaflower.vipsinaapp.com/Phoneapp";
+				var message = new Message(posturl);
+				handler.invoke(message, Message.TEXT);           
+			]]></method>
+            <method id="onComplete" params="handler, message, text"><![CDATA[
+                //Receives result and passes to main container.
+               	channelurl=text;
+               	trace(channelurl);
+                application.distribute( "initChannel" );      	
+            ]]></method>
+        </behavior>
+    </handler>
     
     <behavior id="LabelBehavior_max_temp">
         <method id="onCreate" params="label">
@@ -169,7 +184,7 @@
             line.skin = hiliteSkin;
         </method>
         <method id="humi_autoChanged" params="line">
-            if(water_auto==0)
+            if(humi_auto==0)
                 line.skin = graySkin;
             else 
                 line.skin = button_wet_Skin_L;
@@ -205,7 +220,7 @@
             line.skin = hiliteSkin;
         </method>
         <method id="lumi_auto_numChanged" params="line">
-            if(led_auto==0)
+            if(lumi_auto==0)
                 line.skin = graySkin;
             else 
                 line.skin = button_light_Skin_L;
@@ -292,10 +307,90 @@
             this.onTap(label);
         </method>
         <method id="onTimeChanged" params="label"><![CDATA[
-                label.invoke(new Message("/pull"));
+      //          label.invoke(new Message("/pull"));
          ]]></method>
     </behavior>
+    
+    <behavior id="Main_Bahavior"><![CDATA[
+    function doConnect(url) {
+        var conn = new WebSocket(url);
+        var self = this;
+        trace("start connection\n")
+        
+        conn.onopen = function() {
+            trace("open\n");
+            channel_init = 1;
+        }
+        conn.onmessage = function(e) {
+            var message = JSON.parse(e.data);
+            if(message.sort == "status"){
+            	temp_Info = message.temp_info;
+            	application.distribute( "temp_InfoChanged");
+            	lumi_Info = message.lumi_info;
+            	application.distribute( "lumi_InfoChanged");
+            	humi_Info = message.humi_info;
+            	application.distribute( "humi_InfoChanged");
+            }
+            else if(message.sort == "setting"){
+            	temp_min = message.temp_min;
+            	application.distribute( "mintempChanged");
+            	temp_max = message.temp_max;
+            	application.distribute( "maxtempChanged");
+            	lumi_exp = message.lumi_exp;
+            	application.distribute( "lumiChanged");
+            	humi_exp = message.humi_exp;
+            	application.distribute( "humiChanged");
+            	lumi_auto = message.lumi_auto;
+            	application.distribute( "lumi_autoChanged");
+                application.distribute( "lumi_auto_numChanged");
+            	humi_auto = message.humi_auto;
+            	application.distribute( "humi_autoChanged");
+                application.distribute( "humi_auto_numChanged");
+            }
+            trace("OK ");
+        };
+
+        conn.onclose = function(e) {
+        };
+        
+        conn.onerror = function(e) {
+        };
+        return conn;
+    }
+    function initChannel(){
+        this.conn = this.doConnect(channelurl);
+    }
+    function upload(){
+        if(channel_init==1){
+            var upload_data = new Object();
+            upload_data.sort = "status"
+            upload_data.temp_info = temp_Info;
+            upload_data.lumi_info = lumi_Info;
+            upload_data.humi_info = humi_Info;
+            var upload_message = JSON.stringify(upload_data);
+            this.conn.send(upload_message);
+        }
+    }
+    function upload_setting(){
+        if(channel_init==1){
+            var upload_setting = new Object();
+            upload_setting.sort = "setting";
+            upload_setting.temp_min = temp_min;
+            upload_setting.temp_min = temp_min;
+            upload_setting.lumi_exp = lumi_exp;
+            upload_setting.humi_exp = humi_exp;
+            upload_setting.lumi_auto = lumi_auto;
+            upload_setting.humi_auto = humi_auto;
+            var setting_message = JSON.stringify(upload_setting);
+            this.conn.send(setting_message);
+        }
+    }
+        
+    ]]></behavior>
+    
 	<container id="MainScreen" top="0" left="0" bottom="0" right="0" skin="backgroundSkin">
+	  <behavior like="Main_Bahavior">
+      </behavior>
 	    <column top="0" left="0" bottom="0" right="0">
             <line top="2" left="2" bottom="0" right="2">
                 <label string="'Temperature'">
@@ -385,6 +480,7 @@
 	</container>
     <script>
         <![CDATA[
+            application.invoke(new Message("/getUrl"));
             application.behavior = new MODEL.ApplicationBehavior( application );
     		application.add( new MainScreen() );
         ]]>
@@ -475,14 +571,14 @@
             <method id="onInvoke" params="handler, message">
                 <![CDATA[
                 
-                if (led_auto==0) 
-                	var unled_auto=1;
+                if (lumi_auto==0) 
+                	var unlumi_auto=1;
                 else 
-                	var unled_auto=0;
+                	var unlumi_auto=0;
                 var saeurl = "http://xijincheng.sinaapp.com/phone";
 				var message_sae = new Message(saeurl);
 				message_sae.method = "POST";
-				message_sae.requestText = encodeURI("lumi_auto="+unled_auto);
+				message_sae.requestText = encodeURI("lumi_auto="+unlumi_auto);
 				message_sae.setRequestHeader("Content-Length", message_sae.requestText.length);
 				message_sae.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 				handler.invoke(message_sae, Message.TEXT);           
@@ -499,14 +595,14 @@
             <method id="onInvoke" params="handler, message">
                 <![CDATA[
                 
-                if (water_auto==0) 
-                	var unwater_auto=1;
+                if (humi_auto==0) 
+                	var unhumi_auto=1;
                 else 
-                	var unwater_auto=0;
+                	var unhumi_auto=0;
                 var saeurl = "http://xijincheng.sinaapp.com/phone";
 				var message_sae = new Message(saeurl);
 				message_sae.method = "POST";
-				message_sae.requestText = encodeURI("humi_auto="+unwater_auto);
+				message_sae.requestText = encodeURI("humi_auto="+unhumi_auto);
 				message_sae.setRequestHeader("Content-Length", message_sae.requestText.length);
 				message_sae.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 				handler.invoke(message_sae, Message.TEXT);           
