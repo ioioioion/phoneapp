@@ -67,12 +67,11 @@
                // 	if(json.lumi_auto!=null){
               //  		lumi_auto=json.lumi_auto;
                 		application.distribute( "lumi_autoChanged");
-                		application.distribute( "lumi_auto_numChanged");
+                		application.distribute( "lumi_auto_skin_Changed");
                // 	}
                 //	if(json.humi_auto!=null){
                 //		humi_auto=json.humi_auto;
-                		application.distribute( "humi_autoChanged");
-                		application.distribute( "humi_auto_numChanged");
+                		application.distribute( "humi_auto_skin_Changed");
               //  	}
                 	
               //  	if(json.humi!=null){
@@ -113,7 +112,7 @@
             <method id="onComplete" params="handler, message, text"><![CDATA[
                 //Receives result and passes to main container.
                	channelurl=text;
-               	trace(channelurl);
+            //   	trace(channelurl);
                 application.distribute( "initChannel" );      	
             ]]></method>
         </behavior>
@@ -133,7 +132,7 @@
             this.onTap(label);
         </method>
         <method id="onTap" params="label">
-            trace(label.string);
+     //       trace(label.string);
         </method>
     </behavior>
     <behavior id="LabelBehavior_min_temp">
@@ -163,14 +162,22 @@
         </method>
         <method id="onTouchEnded" params="label">
             this.onTap(label);
+      //      label.skin = button_wet_Skin_L;
         </method>
         <method id="onTap" params="label">
-            label.invoke(new Message("/water_setting"));
+          //  label.invoke(new Message("/water_setting"));
+          	if(humi_auto == 0)
+          		humi_auto = 1; 
+          	else if(humi_auto == 1)
+          		humi_auto = 0;
+          application.distribute( "upload_setting");
+          application.distribute( "humi_auto_skin_Changed");
         </method>
     </behavior>
     <behavior id="LineBehavior_exp_humi">
         <method id="onCreate" params="line">
-            line.skin = button_wet_Skin_L;
+       //     line.skin = button_wet_Skin_L;
+       		line.skin = graySkin;
         </method>
         <method id="onTouchBegan" params="line">
         </method>
@@ -183,7 +190,7 @@
         <method id="exp_humi_pressed" params="line">
             line.skin = hiliteSkin;
         </method>
-        <method id="humi_autoChanged" params="line">
+        <method id="humi_auto_skin_Changed" params="line">
             if(humi_auto==0)
                 line.skin = graySkin;
             else 
@@ -202,7 +209,15 @@
             this.onTap(label);
         </method>
         <method id="onTap" params="label">
-            label.invoke(new Message("/light_setting"));
+           // label.invoke(new Message("/light_setting"));
+        	if(lumi_auto==0)
+          		lumi_auto=1;
+           	else if(lumi_auto==1)
+           		lumi_auto=0;
+           	application.distribute( "upload_setting");
+           	application.distribute( "lumi_auto_skin_Changed");
+           	
+           
         </method>       
     </behavior>
     <behavior id="LineBehavior_exp_lumi">
@@ -210,16 +225,18 @@
             line.skin = graySkin;
         </method>
         <method id="onTouchBegan" params="line">
+      //  	application.distribute( "exp_lumi_pressed");
         </method>
         <method id="onTouchEnded" params="line">
             this.onTap(line);
         </method>
         <method id="onTap" params="line">
+
         </method>
         <method id="exp_lumi_pressed" params="line">
             line.skin = hiliteSkin;
         </method>
-        <method id="lumi_auto_numChanged" params="line">
+        <method id="lumi_auto_skin_Changed" params="line">
             if(lumi_auto==0)
                 line.skin = graySkin;
             else 
@@ -341,13 +358,11 @@
             	humi_exp = message.humi_exp;
             	application.distribute( "humiChanged");
             	lumi_auto = message.lumi_auto;
-            	application.distribute( "lumi_autoChanged");
-                application.distribute( "lumi_auto_numChanged");
+                application.distribute( "lumi_auto_skin_Changed");
             	humi_auto = message.humi_auto;
-            	application.distribute( "humi_autoChanged");
-                application.distribute( "humi_auto_numChanged");
+            	application.distribute( "humi_auto_skin_Changed");
             }
-            trace("OK ");
+       //     trace("phone receive info ");
         };
 
         conn.onclose = function(e) {
@@ -360,27 +375,18 @@
     function initChannel(){
         this.conn = this.doConnect(channelurl);
     }
-    function upload(){
-        if(channel_init==1){
-            var upload_data = new Object();
-            upload_data.sort = "status"
-            upload_data.temp_info = temp_Info;
-            upload_data.lumi_info = lumi_Info;
-            upload_data.humi_info = humi_Info;
-            var upload_message = JSON.stringify(upload_data);
-            this.conn.send(upload_message);
-        }
-    }
     function upload_setting(){
         if(channel_init==1){
             var upload_setting = new Object();
             upload_setting.sort = "setting";
             upload_setting.temp_min = temp_min;
-            upload_setting.temp_min = temp_min;
+            upload_setting.temp_max = temp_max;
             upload_setting.lumi_exp = lumi_exp;
             upload_setting.humi_exp = humi_exp;
             upload_setting.lumi_auto = lumi_auto;
             upload_setting.humi_auto = humi_auto;
+            trace("\nlumiauto:");
+            trace(lumi_auto);
             var setting_message = JSON.stringify(upload_setting);
             this.conn.send(setting_message);
         }
@@ -562,20 +568,32 @@
                 <![CDATA[
                 for (var key in query) {
                     switch(key){
-                        case "temp_max":var po_temp_max = eval(query[key]).toFixed(0);break;
-                        case "temp_min":var po_temp_min = eval(query[key]).toFixed(0);break;
-                        case "lumi_exp":var po_lumi_exp = eval(query[key]).toFixed(0);break;
-                        case "humi_exp":var po_humi_exp = eval(query[key]).toFixed(0);break;
+                        case "temp_max":temp_max = eval(query[key]).toFixed(0);break;
+                        case "temp_min":temp_min = eval(query[key]).toFixed(0);break;
+                        case "lumi_exp":lumi_exp = eval(query[key]).toFixed(0);break;
+                        case "humi_exp":humi_exp = eval(query[key]).toFixed(0);break;
                     }  
                 }
-                if(po_temp_max-po_temp_min>1){
-                    var saeurl = "http://xijincheng.sinaapp.com/phone";
-    				var message_sae = new Message(saeurl);
-    				message_sae.method = "POST";
-    				message_sae.requestText = encodeURI("humi_exp="+po_humi_exp+"&lumi_exp="+po_lumi_exp+"&temp_max="+po_temp_max+"&temp_min="+po_temp_min);
-    				message_sae.setRequestHeader("Content-Length", message_sae.requestText.length);
-    				message_sae.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    				handler.invoke(message_sae, Message.TEXT);
+                if(temp_max-temp_min>1){
+           //         var saeurl = "http://xijincheng.sinaapp.com/phone";
+    		//		var message_sae = new Message(saeurl);
+    		//		message_sae.method = "POST";
+    		//		message_sae.requestText = encodeURI("humi_exp="+po_humi_exp+"&lumi_exp="+po_lumi_exp+"&temp_max="+po_temp_max+"&temp_min="+po_temp_min);
+    		//		message_sae.setRequestHeader("Content-Length", message_sae.requestText.length);
+    		//		message_sae.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    		//		handler.invoke(message_sae, Message.TEXT);
+    				application.distribute( "upload_setting" );
+    				application.distribute( "mintempChanged");
+            	
+            		application.distribute( "maxtempChanged");
+            	
+            		application.distribute( "lumiChanged");
+            	
+            		application.distribute( "humiChanged");
+            	
+                	application.distribute( "lumi_auto_skin_Changed");
+            	
+            		application.distribute( "humi_auto_skin_Changed");
                 }
                 else{
                     handler.invoke(new Message("/error_setting"));
