@@ -538,7 +538,7 @@
                         }
                         
                     ],
-                    ok: "Comfirm",
+                    ok: "Confirm",
                     cancel: "Close",
                     action: "/setting_handler",
                 };
