@@ -361,8 +361,8 @@
                 application.distribute( "lumi_auto_skin_Changed");
             	humi_auto = message.humi_auto;
             	application.distribute( "humi_auto_skin_Changed");
+  //          	trace("phone receive info "+e.data+"\n");
             }
-       //     trace("phone receive info ");
         };
 
         conn.onclose = function(e) {
