@@ -13,6 +13,7 @@
     <variable id="temp_Info" value="0"/>
     <variable id="lumi_Info" value="0"/>
     <variable id="humi_Info" value="0"/>
+    <variable id="temp_status" value="0"/>
     <!-- ASSETS -->
     <skin id="backgroundSkin" color="#000000"/>
     <skin id="graySkin" color="#888888"/>
@@ -343,6 +344,13 @@
             if(message.sort == "status"){
             	temp_Info = message.temp_info;
             	application.distribute( "temp_InfoChanged");
+                if((eval(temp_Info)>eval(temp_max)||eval(temp_Info)<eval(temp_min))&&temp_status!=1){
+                    temp_status=1;
+                    application.invoke( new Message("/temp_abnormal") ); 
+                }
+                else if(temp_status!=0&&eval(temp_Info)<(eval(temp_max)-1)&&eval(temp_Info)>(eval(temp_min)+1)){
+                    temp_status=0;
+                }
             	lumi_Info = message.lumi_info;
             	application.distribute( "lumi_InfoChanged");
             	humi_Info = message.humi_info;
@@ -492,7 +500,23 @@
         ]]>
     </script>
     
-    
+    <handler path="/temp_abnormal">
+        <behavior like="MODEL.DialogBehavior">
+             <method id="onDescribe" params="query">
+                return {
+                    Dialog: DIALOG.Box,
+                    title: "Temperature Alert",
+                    items: [
+                        {
+                            Item: DIALOG.Caption,
+                            string: "Temperature out of range!",
+                        },
+                    ],
+                    ok: "OK",
+                };
+            </method>
+        </behavior>
+    </handler> 
     <handler path="/setting">
         <behavior like="MODEL.DialogBehavior">
              <method id="onDescribe" params="query">
